@@ -1,5 +1,7 @@
 # Rails::Bootstrap::Markdown
 
+[![Maintenance](https://img.shields.io/maintenance/no/2014.svg)]()
+
 A rails gem for [Bootstrap Markdown](http://toopay.github.io/bootstrap-markdown/), rewritten to SCSS for use with [bootstrap-sass](https://github.com/thomas-mcdonald/bootstrap-sass).
 
 3rd party libraries included:
