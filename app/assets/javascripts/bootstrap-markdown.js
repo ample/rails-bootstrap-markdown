@@ -1053,6 +1053,14 @@
               e.setSelection(cursor,cursor+chunk.length)
             }
           }
+        },{
+          name: 'cmdVideo',
+          title: 'Video',
+          hotkey: 'Ctrl+Z',
+          icon: { glyph: 'glyphicon glyphicon-film', fa: 'fa fa-film', 'fa-3': 'icon-film' },
+          callback: function(e){
+            alert('TODO: Implement a modal window for selecting a video. When the user makes a selection, close the modal and insert the link element in the textarea.');
+          }
         }]
       },{
         name: 'groupMisc',
