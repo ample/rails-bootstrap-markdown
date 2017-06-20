@@ -1059,7 +1059,27 @@
           hotkey: 'Ctrl+Z',
           icon: { glyph: 'glyphicon glyphicon-film', fa: 'fa fa-film', 'fa-3': 'icon-film' },
           callback: function(e){
-            alert('TODO: Implement a modal window for selecting a video. When the user makes a selection, close the modal and insert the link element in the textarea.');
+            // Give ![] surround the selection and prepend the image link
+            var chunk, cursor, selected = e.getSelection(), content = e.getContent(), link
+
+            if (selected.length == 0) {
+              // Give extra word
+              chunk = e.__localize('enter video title here')
+            } else {
+              chunk = selected.text
+            }
+
+            link = prompt(e.__localize('Insert Video Hyperlink'),'http://')
+
+            if (link != null && link != '' && link != 'http://') {
+              // transform selection and set the cursor into chunked text
+              e.replaceSelection('<a href="'+link+'" rel="facebox" rev="iframe|640x360"><i class="fa fa-play-circle"></i>&nbsp; '+ chunk +'</a>');
+
+              cursor = selected.start+link.length+86;
+
+              // Set the cursor
+              e.setSelection(cursor,cursor+chunk.length)
+            }
           }
         }]
       },{
