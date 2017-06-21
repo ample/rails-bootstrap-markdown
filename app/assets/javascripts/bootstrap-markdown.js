@@ -1059,27 +1059,67 @@
           hotkey: 'Ctrl+Z',
           icon: { glyph: 'glyphicon glyphicon-film', fa: 'fa fa-film', 'fa-3': 'icon-film' },
           callback: function(e){
-            // Give ![] surround the selection and prepend the image link
-            var chunk, cursor, selected = e.getSelection(), content = e.getContent(), link
+            
+            // Open modal
+            $('#modal-add-link').modal();
 
-            if (selected.length == 0) {
-              // Give extra word
-              chunk = e.__localize('enter video title here')
-            } else {
-              chunk = selected.text
-            }
+            // Set onclick event for after a user picks a video in the modal
+            $('#enter_video_selection').on('click', function(){
+              var video_type = $('#video_type').val();
+              if(!!video_type){
+                // get video type name and set to lowercase
+                var video_type_lower = video_type.toLowerCase();
 
-            link = prompt(e.__localize('Insert Video Hyperlink'),'http://')
+                // get video id (or link for URL cases)
+                var selected_id = $("#"+video_type_lower+"_video").val();
 
-            if (link != null && link != '' && link != 'http://') {
-              // transform selection and set the cursor into chunked text
-              e.replaceSelection('<a href="'+link+'" rel="facebox" rev="iframe|640x360"><i class="fa fa-play-circle"></i>&nbsp; '+ chunk +'</a>');
+                // placeholder final link
+                var link_url = "";
 
-              cursor = selected.start+link.length+86;
+                // set video links per type
+                if(video_type_lower == "vidyard"){
+                  link_url="http://play.vidyard.com/"+selected_id+"?v=3.1.1&type=inline";
+                }
+                if(video_type_lower == "vimeo"){
+                  link_url = "https://player.vimeo.com/video/"+selected_id;
+                }
+                if(video_type_lower == "url"){
+                  link_url=selected_id;
+                }
 
-              // Set the cursor
-              e.setSelection(cursor,cursor+chunk.length)
-            }
+                if (link_url != null && link_url != '' && link_url != 'http://') {
+
+                  // let's close the modal and get back to the WYSIWYG
+                  // also, remove the click listener to reduce duplication
+                  // set focus back on WYSIWG so we can see the selected text for setting title
+                  $('#modal-add-link').modal("hide");
+                  $('#enter_video_selection').off('click');
+                  $("#page_body").focus();
+
+                  // Back to the common code for other buttons/options
+                  var chunk, cursor, selected = e.getSelection(), content = e.getContent(), link
+
+                  if (selected.length == 0) {
+                    // Give extra word
+                    chunk = e.__localize('enter video title here')
+                  } else {
+                    chunk = selected.text
+                  }
+
+                  // transform selection and set the cursor into chunked text
+                  e.replaceSelection('<a href="'+link_url+'" rel="facebox" rev="iframe|640x360"><i class="fa fa-play-circle"></i>&nbsp; '+ chunk +'</a>');
+
+                  cursor = selected.start+link_url.length+86;
+
+                  // Set the cursor
+                  e.setSelection(cursor,cursor+chunk.length);
+                }
+                else{
+                  $('.modal_error').show();
+                }
+              }
+
+            });
           }
         }]
       },{
